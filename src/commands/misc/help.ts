@@ -9,7 +9,7 @@ export default class Help extends Command {
         super({
             name,
             category: "Hidden",
-            help: "Gets help.",
+            help: "Get some help.",
             usage: "help [command]",
             aliases: ["command", "commands"]
         })
@@ -40,8 +40,7 @@ ${Object.entries(categorized)
     ${items.sort((a, b) => a.localeCompare(b)).map(cmd => `${config.prefix}${cmd}`).join(", ")}`)
         .join("\n")}
 
-*Use \`${config.prefix}help <command name>\` for more information about a command specific.*
-*See \`${config.prefix}credits\` for how to contact the developer.*
+*Use \`${config.prefix}help <command name>\` for more information about a specific command.*
 *You can invite this bot to your server with \`${config.prefix}invite\`.*`)
         }
 

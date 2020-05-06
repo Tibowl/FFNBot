@@ -1,7 +1,8 @@
 {
     "token": "DISCORD TOKEN",
-    "prefix": "ffn",
-    "activity": ".help",
+    "prefix": "ffn!",
+    "production": false,
+    "activity": "ffn!help",
     "admins": ["YOUR USER ID HERE"],
     "twitter": {
         "consumer_key":        "CONSUMER KEY",

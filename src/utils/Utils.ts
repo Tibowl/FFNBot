@@ -1,6 +1,23 @@
 import {  Message, TextChannel, StringResolvable, MessageEmbed, MessageAttachment } from "discord.js"
-import client from "./../main"
 
+import client from "./../main"
+import { Article } from "./Types"
+
+export function displayArticle(article: Article): MessageEmbed {
+    const embed = new MessageEmbed()
+        .setTitle(article.headline)
+        .setAuthor(article.author, client.user?.avatarURL() ?? "https://cdn.discordapp.com/avatars/707704786253774852/b8d158121fca8e3ef692f17299107495.png?size=256", "https://www.fakefake.news/")
+        .setDescription(article.description)
+        .setTimestamp(article.publishedDate)
+        .setURL(`https://www.fakefake.news/article/${article.id}`)
+        .setFooter(article.category.replace(/^[a-z]/, a => a.toUpperCase()))
+        .setColor("#ff0000")
+
+    if (article.image !== "/")
+        embed.setImage(`https://www.fakefake.news/_nuxt/assets/${article.image}`)
+
+    return embed
+}
 
 export async function sendToChannels(channels: string[] | undefined, content?: StringResolvable, embed?: MessageEmbed | MessageAttachment): Promise<(Message | Message[])[]> {
     const messages = []
@@ -13,21 +30,4 @@ export async function sendToChannels(channels: string[] | undefined, content?: S
     }
 
     return Promise.all(messages)
-}
-
-export function shiftDate(date: Date, time: number): Date {
-    date.setUTCDate(date.getUTCDate() + time)
-    return date
-}
-export function shiftMonth(date: Date, time: number): Date {
-    date.setUTCMonth(date.getUTCMonth() + time)
-    return date
-}
-export function shiftHour(date: Date, time: number): Date {
-    date.setUTCHours(date.getUTCHours() + time)
-    return date
-}
-export function shiftMinute(date: Date, time: number): Date {
-    date.setUTCMinutes(date.getUTCMinutes() + time)
-    return date
 }

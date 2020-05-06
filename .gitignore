@@ -91,4 +91,5 @@ dist/
 .vscode
 **/config.json
 **/store.json
+**/articles.json
 *.old

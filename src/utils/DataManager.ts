@@ -2,7 +2,7 @@ import log4js from "log4js"
 import { exists, unlink, move, writeFile, existsSync, readFileSync } from "fs-extra"
 import { join } from "path"
 
-import {   Store,   } from "./Types"
+import { Store, Article } from "./Types"
 
 const Logger = log4js.getLogger("DataManager")
 const existsP = (path: string): Promise<boolean> => new Promise((resolve) => exists(path, resolve))
@@ -12,9 +12,13 @@ const store = join(path, "store.json")
 const oldstore = join(path, "store.json.old")
 
 export default class DataManager {
-    store: Store = {  }
+    store: Store = { lastID: "0" }
+    articles: Article[] = []
 
     constructor() {
+        this.articles = JSON.parse(readFileSync(join(path, "articles.json")).toString())
+        Logger.info(`Loaded ${this.articles.length} articles`)
+
         try {
             if (existsSync(store))
                 try {
@@ -37,6 +41,34 @@ export default class DataManager {
         } catch (error) {
             Logger.error("Failed to open store.json", error)
         }
+    }
+
+    lastReleased = 0
+    getLastReleasedIndex(): number {
+        while (this.lastReleased < this.articles.length && this.articles[this.lastReleased].publishedDate <= Date.now())
+            this.lastReleased++
+
+        return this.lastReleased - 1
+    }
+
+    getNextArticle(): Article {
+        return this.articles[this.getLastReleasedIndex()]
+    }
+
+    getRandomArticle(): Article {
+        return this.articles[Math.floor(Math.random() * this.getLastReleasedIndex())]
+    }
+
+    getArticle(id: string): Article | undefined {
+        const article = this.articles.find(art => art.id === id)
+        if (article && article.ind > this.getLastReleasedIndex())
+            return undefined
+
+        return article
+    }
+
+    searchArticles(query: string[]): Article[] {
+        return this.articles.filter(art => art.ind <= this.getLastReleasedIndex() && query.every(q => art.headline.toLowerCase().includes(q.toLowerCase().trim())))
     }
 
     lastStore: number | NodeJS.Timeout | undefined = undefined
