@@ -6,6 +6,13 @@ import { Article } from "./Types"
 import { sendToChannels, displayArticle, getURL, truncate } from "../utils/Utils"
 
 const Logger = log4js.getLogger("TimerManager")
+const news = [
+    "*NEWS FLASH*",
+    "*BREAKING NEWS*",
+    "**BREAKING NEWS**",
+    "*NEWS UPDATE*",
+    "**NEWS UPDATE**"
+]
 
 export default class TimerManager {
     activityTimer: NodeJS.Timeout | undefined = undefined
@@ -34,6 +41,10 @@ export default class TimerManager {
             setTimeout(updateActivity, 1000)
     }
 
+    getBreakingNews(): string {
+        return news[Math.floor(Math.random() * news.length)]
+    }
+
     async postNewArticles(): Promise<void> {
         if (this.previousPost === undefined) return
 
@@ -57,7 +68,7 @@ export default class TimerManager {
             data.store.lastID = this.previousPost.id
 
             Logger.info(`Posting ${article.id}: ${article.headline}...`)
-            await sendToChannels(data.store.channels, "A new article has been published", displayArticle(article))
+            await sendToChannels(data.store.channels, this.getBreakingNews(), displayArticle(article))
             await client.tweetManager.postTweet(`${truncate(article.headline, 220)} | #FakeFakeNews ${getURL(article, false)}`)
             await client.redditManager.post(article.headline, getURL(article, true))
         }
