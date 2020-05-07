@@ -64,24 +64,7 @@ export default class TimerManager {
             data.store.lastID = this.previousPost.id
 
             Logger.info(`Posting ${article.id}: ${article.headline}...`)
-            try {
-                await sendToChannels(data.store.channels, this.getBreakingNews(), displayArticle(article))
-            } catch (error) {
-                Logger.error(`Failed to post on discord: ${article.id}`)
-                sendError(`Failed to post on discord: ${article.id}`)
-            }
-            try {
-                await client.tweetManager.postTweet(`${truncate(article.headline, 220)} | #FakeFakeNews ${getURL(article, false)}`)
-            } catch (error) {
-                Logger.error(`Failed to tweet: ${article.id}`)
-                sendError(`Failed to tweet: ${article.id}`)
-            }
-            try {
-                await client.redditManager.post(article.headline, getURL(article, true))
-            } catch (error) {
-                Logger.error(`Failed to post on reddit: ${article.id}`)
-                sendError(`Failed to post on reddit: ${article.id}`)
-            }
+            await this.postArticle(article)
         }
         data.saveStore()
 
@@ -95,5 +78,28 @@ export default class TimerManager {
         setTimeout(() => {
             this.postNewArticles()
         }, time)
+    }
+
+    async postArticle(article: Article): Promise<void> {
+        const { data } = client
+
+        try {
+            await sendToChannels(data.store.channels, this.getBreakingNews(), displayArticle(article))
+        } catch (error) {
+            Logger.error(`Failed to post on discord: ${article.id}`)
+            sendError(`Failed to post on discord: ${article.id}`)
+        }
+        try {
+            await client.tweetManager.postTweet(`${truncate(article.headline, 220)} | #FakeFakeNews ${getURL(article, false)}`)
+        } catch (error) {
+            Logger.error(`Failed to tweet: ${article.id}`)
+            sendError(`Failed to tweet: ${article.id}`)
+        }
+        try {
+            await client.redditManager.post(article.headline, getURL(article, true))
+        } catch (error) {
+            Logger.error(`Failed to post on reddit: ${article.id}`)
+            sendError(`Failed to post on reddit: ${article.id}`)
+        }
     }
 }
