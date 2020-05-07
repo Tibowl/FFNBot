@@ -57,17 +57,18 @@ export default class TimerManager {
             data.store.lastID = this.previousPost.id
 
             Logger.info(`Posting ${article.id}: ${article.headline}...`)
-            await sendToChannels(data.store.channels, "New article", displayArticle(article))
-            await client.tweetManager.postTweet(`${truncate(article.headline, 220)} | #FakeFakeNews ${getURL(article)}`)
-            await client.redditManager.post(article.headline, getURL(article))
+            await sendToChannels(data.store.channels, "A new article has been published", displayArticle(article))
+            await client.tweetManager.postTweet(`${truncate(article.headline, 220)} | #FakeFakeNews ${getURL(article, false)}`)
+            await client.redditManager.post(article.headline, getURL(article, true))
         }
         data.saveStore()
 
         const next = data.getNextArticle()
         if (next == undefined) return
 
-        const time = next.publishedDate - Date.now() + 60000
-        Logger.info(`Next article at ${(time / 1000 / 60).toFixed(1)}m from now (at ${new Date(next.publishedDate)})`)
+        const target = next.publishedDate + 60000
+        const time = target - Date.now()
+        Logger.info(`Next article at ${(time / 1000 / 60).toFixed(1)}m from now (at ${new Date(target).toISOString()})`)
 
         setTimeout(() => {
             this.postNewArticles()

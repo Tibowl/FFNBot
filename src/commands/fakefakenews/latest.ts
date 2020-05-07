@@ -11,7 +11,7 @@ export default class Latest extends Command {
             category: "FakeFakeNews",
             help: "Show latest article",
             usage: "latest",
-            aliases: ["new"]
+            aliases: ["newest", "n", "l"]
         })
     }
 

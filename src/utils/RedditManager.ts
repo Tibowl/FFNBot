@@ -13,6 +13,9 @@ export default class RedditManager {
         this.r.getSubreddit("FakeFakeNewsArticles").submitLink({
             title,
             url
-        } as never)
+        } as never).then(submission => submission.assignFlair({
+            text: "News",
+            cssClass: "li-fl-news",
+        }))
     }
 }

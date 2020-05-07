@@ -11,7 +11,7 @@ export default class SearchArticle extends Command {
             category: "FakeFakeNews",
             help: "Search for an article, shows a random one if multiple matched",
             usage: "search <search terms>",
-            aliases: ["find", "lookup"]
+            aliases: ["find", "lookup", "s", "f"]
         })
     }
 

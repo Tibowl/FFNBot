@@ -11,7 +11,7 @@ export default class Article extends Command {
             category: "FakeFakeNews",
             help: "Show an article",
             usage: "article <id>",
-            aliases: ["show", "id"]
+            aliases: ["show", "id", "a"]
         })
     }
 
