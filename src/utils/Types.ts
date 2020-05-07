@@ -1,5 +1,6 @@
 export interface Store {
     lastID: string
+    channels: string[]
     stats?: Stats
 }
 

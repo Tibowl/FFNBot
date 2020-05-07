@@ -24,19 +24,21 @@
         "fs-extra": "^9.0.0",
         "log4js": "^6.1.2",
         "node-fetch": "^2.6.0",
+        "snoowrap": "^1.21.0",
         "twit": "^2.2.11"
     },
     "devDependencies": {
         "@types/fs-extra": "^8.1.0",
         "@types/node": "^13.7.7",
         "@types/node-fetch": "^2.5.5",
-        "@types/twit": "^2.2.23",
+        "@types/twit": "^2.2.24",
         "@types/ws": "^7.2.3",
         "@typescript-eslint/eslint-plugin": "^2.21.0",
         "@typescript-eslint/parser": "^2.21.0",
         "eslint": "^6.8.0",
         "nodemon": "^2.0.2",
         "ts-node": "^8.6.2",
+        "twitter-d": "^0.4.0",
         "typescript": "^3.8.3"
     }
 }

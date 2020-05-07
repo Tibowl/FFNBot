@@ -4,6 +4,7 @@ dependencies:
   fs-extra: 9.0.0
   log4js: 6.2.1
   node-fetch: 2.6.0
+  snoowrap: 1.21.0
   twit: 2.2.11
 devDependencies:
   '@types/fs-extra': 8.1.0
@@ -16,6 +17,7 @@ devDependencies:
   eslint: 6.8.0
   nodemon: 2.0.3
   ts-node: 8.10.1_typescript@3.8.3
+  twitter-d: 0.4.0
   typescript: 3.8.3
 lockfileVersion: 5.1
 packages:
@@ -301,6 +303,10 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-+Ryf6g3BKoRc7jfp7ad8tM4TtMiaWvbF/1/sQcZPkkS7ag3D5nMBCe2UfOTONtAkaG0tO0ij3C5Lwmf1EiyjHg==
+  /async-limiter/1.0.1:
+    dev: false
+    resolution:
+      integrity: sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==
   /asynckit/0.4.0:
     resolution:
       integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=
@@ -1058,6 +1064,10 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-sNvOCzEQNr/qrvJgc3UG/kD4QtlHycrzwS+6mfTrrSq97BvaYcPZZI1ZSqGSPR73Cxn4LKTD4PttRwfU7jWq5g==
+  /harmony-reflect/1.6.1:
+    dev: false
+    resolution:
+      integrity: sha512-WJTeyp0JzGtHcuMsi7rw2VwtkvLa+JyfEKJCFyfcS0+CDkjQ5lHPu7zEhFZP+PDSRrEgXa5Ah0l1MbgbE41XjA==
   /has-flag/3.0.0:
     dev: true
     engines:
@@ -1607,6 +1617,12 @@ packages:
       node: '>=0.4.0'
     resolution:
       integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
+  /promise-chains/0.3.12:
+    dependencies:
+      harmony-reflect: 1.6.1
+    dev: false
+    resolution:
+      integrity: sha1-aOY0hMm5YvHW4qtnIyTRT1kJ7iE=
   /psl/1.8.0:
     dev: false
     resolution:
@@ -1687,6 +1703,31 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-8acYXXTI0AkQv6RAOjE3vOaIXZkT9wo4LOFbBKYQEEnnMNBpKqdUrI6S4NT0KPIo/WVvJ5tE/X5LF/TQUf0ekw==
+  /request-promise-core/1.1.3_request@2.88.2:
+    dependencies:
+      lodash: 4.17.15
+      request: 2.88.2
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    peerDependencies:
+      request: ^2.34
+    resolution:
+      integrity: sha512-QIs2+ArIGQVp5ZYbWD5ZLCY29D5CfWizP8eWnm8FoGD1TX61veauETVQbrV60662V0oFBkrDOuaBI8XgtuyYAQ==
+  /request-promise/4.2.5_request@2.88.2:
+    dependencies:
+      bluebird: 3.7.2
+      request: 2.88.2
+      request-promise-core: 1.1.3_request@2.88.2
+      stealthy-require: 1.1.1
+      tough-cookie: 2.5.0
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    peerDependencies:
+      request: ^2.34
+    resolution:
+      integrity: sha512-ZgnepCykFdmpq86fKGwqntyTiUrHycALuGggpyCZwMvGaZWgxW6yagT0FHkgo5LzYvOaCNvxYwWYIjevSH1EDg==
   /request/2.88.2:
     dependencies:
       aws-sign2: 0.7.0
@@ -1761,6 +1802,10 @@ packages:
       npm: '>=2.0.0'
     resolution:
       integrity: sha512-WfQI+1gohdf0Dai/Bbmk5L5ItH5tYqm3ki2c5GdWhKjalzjg93N3avFjVStyZZz+A2Em+ZxKH5bNghw9UeylGQ==
+  /safe-buffer/5.1.2:
+    dev: false
+    resolution:
+      integrity: sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
   /safe-buffer/5.2.0:
     dev: false
     resolution:
@@ -1818,6 +1863,19 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-Qu+VC3EwYLldKa1fCxuuvULvSJOKEgk9pi8dZeCVK7TqBfUNTH4sFkk4joj8afVSfAYgJoSOetjx9QWOJ5mYoQ==
+  /snoowrap/1.21.0:
+    dependencies:
+      bluebird: 3.7.2
+      lodash: 4.17.15
+      promise-chains: 0.3.12
+      request: 2.88.2
+      request-promise: 4.2.5_request@2.88.2
+      ws: 3.3.3
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-vSQlfm0ikek6mezBhTGtYw0vk4hdpgIrtm2o4kZPDzg0HVs4b/Kw7COEfD8TujQP0zzp9EGSwa1rkHufBrwkEw==
   /source-map-support/0.5.19:
     dependencies:
       buffer-from: 1.1.1
@@ -1852,6 +1910,12 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-HXXqVUq7+pcKeLqqZj6mHFUMvXtOJt1uoUx09pFW6011inTMxqI8BA8PM95myrIyyKwdnzjdFjLiE6KBPVtJIg==
+  /stealthy-require/1.1.1:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-NbCYdbT/SfJqd35QmzCQoyJr8ks=
   /streamroller/2.2.4:
     dependencies:
       date-format: 2.1.0
@@ -2044,6 +2108,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-BkdwvZGRVoUTcEBp0zuocuqfih4LB+kEFUWkWJOVBg6pAE9Ebv9vmsYTTrfXleZGf45Bj5H3A1/O9YhF2uSYNg==
+  /twitter-d/0.4.0:
+    dev: true
+    resolution:
+      integrity: sha512-t8z7qqq0yt1dD7BUISRvASw9mtYRMSTTVzmkvjz8oM9ZN++LEC6Ix8WEXZS0RtswnGgwdSPTxY9qyHcYgPexdA==
   /type-check/0.3.2:
     dependencies:
       prelude-ls: 1.1.2
@@ -2077,6 +2145,10 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
+  /ultron/1.1.1:
+    dev: false
+    resolution:
+      integrity: sha512-UIEXBNeYmKptWH6z8ZnqTeS8fV74zG0/eRU9VGkpzz+LIJNs8W/zM/L+7ctCkRrgbNnnR0xxw4bKOr0cW0N0Og==
   /undefsafe/2.0.3:
     dependencies:
       debug: 2.6.9
@@ -2197,6 +2269,14 @@ packages:
       node: '>=4'
     resolution:
       integrity: sha512-/lg70HAjtkUgWPVZhZcm+T4hkL8Zbtp1nFNOn3lRrxnlv50SRBv7cR7RqR+GMsd3hUXy9hWBo4CHTbFTcOYwig==
+  /ws/3.3.3:
+    dependencies:
+      async-limiter: 1.0.1
+      safe-buffer: 5.1.2
+      ultron: 1.1.1
+    dev: false
+    resolution:
+      integrity: sha512-nnWLa/NwZSt4KQJu51MYlCcSQ5g7INpOrOMt4XV8j4dqTXdmlUmSHQ8/oLC069ckre0fRsgfvsKwbTdtKLCDkA==
   /ws/7.2.5:
     dev: false
     engines:
@@ -2227,7 +2307,7 @@ specifiers:
   '@types/fs-extra': ^8.1.0
   '@types/node': ^13.7.7
   '@types/node-fetch': ^2.5.5
-  '@types/twit': ^2.2.23
+  '@types/twit': ^2.2.24
   '@types/ws': ^7.2.3
   '@typescript-eslint/eslint-plugin': ^2.21.0
   '@typescript-eslint/parser': ^2.21.0
@@ -2238,6 +2318,8 @@ specifiers:
   log4js: ^6.1.2
   node-fetch: ^2.6.0
   nodemon: ^2.0.2
+  snoowrap: ^1.21.0
   ts-node: ^8.6.2
   twit: ^2.2.11
+  twitter-d: ^0.4.0
   typescript: ^3.8.3

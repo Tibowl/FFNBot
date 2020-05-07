@@ -31,3 +31,24 @@ export async function sendToChannels(channels: string[] | undefined, content?: S
 
     return Promise.all(messages)
 }
+
+function limitIndex(words: string[], maxLength = 50): number {
+    let end = 0; let currentLength = 0
+    for (; end < words.length; end++) {
+        if (currentLength + words[end].length >= maxLength) {
+            break
+        }
+        currentLength += words[end].length + 1
+    }
+    return end
+}
+
+export function truncate(title: string, maxLength = 50): string {
+    const words = title.split(" ")
+    const end = limitIndex(words, maxLength)
+    return `${words.slice(0, end).join(" ")}${end < words.length ? "..." : ""}`
+}
+
+export function getURL(article: Article): string {
+    return `https://www.fakefake.news/article/${article.id}`
+}

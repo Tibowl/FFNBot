@@ -3,8 +3,9 @@ import log4js from "log4js"
 import client from "../main"
 import config from "../data/config.json"
 import { Article } from "./Types"
+import { sendToChannels, displayArticle, getURL, truncate } from "../utils/Utils"
 
-const Logger = log4js.getLogger("TweetManager")
+const Logger = log4js.getLogger("TimerManager")
 
 export default class TimerManager {
     activityTimer: NodeJS.Timeout | undefined = undefined
@@ -12,7 +13,7 @@ export default class TimerManager {
 
     init(): void {
         const { data } = client
-        this.previousPost = data.getArticle(data.store.lastID) ?? data.getNextArticle()
+        this.previousPost = data.getArticle(data.store.lastID) ?? data.getLatestArticle()
 
         data.store.lastID = this.previousPost.id
         data.saveStore()
@@ -33,22 +34,43 @@ export default class TimerManager {
             setTimeout(updateActivity, 1000)
     }
 
-    postNewArticles(): void {
+    async postNewArticles(): Promise<void> {
         if (this.previousPost === undefined) return
 
         const { data } = client
         const newArticles = data.articles.slice(this.previousPost.ind+1, data.getLastReleasedIndex()+1)
 
-        if (newArticles.length === 0) return
         Logger.info(`Found ${newArticles.length} new articles`)
+
+        if (!config.production) {
+            Logger.info("In dev mode, not posting")
+            return
+        }
+
+        if (newArticles.length > 10) {
+            Logger.error("More than 10 new articles, skipping posting")
+            return
+        }
 
         for (const article of newArticles) {
             this.previousPost = article
             data.store.lastID = this.previousPost.id
 
             Logger.info(`Posting ${article.id}: ${article.headline}...`)
-            // TODO
+            await sendToChannels(data.store.channels, "New article", displayArticle(article))
+            await client.tweetManager.postTweet(`${truncate(article.headline, 220)} | #FakeFakeNews ${getURL(article)}`)
+            await client.redditManager.post(article.headline, getURL(article))
         }
         data.saveStore()
+
+        const next = data.getNextArticle()
+        if (next == undefined) return
+
+        const time = next.publishedDate - Date.now() + 60000
+        Logger.info(`Next article at ${(time / 1000 / 60).toFixed(1)}m from now (at ${new Date(next.publishedDate)})`)
+
+        setTimeout(() => {
+            this.postNewArticles()
+        }, time)
     }
 }

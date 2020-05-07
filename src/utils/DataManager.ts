@@ -10,9 +10,13 @@ const existsP = (path: string): Promise<boolean> => new Promise((resolve) => exi
 const path = join(__dirname, "../../src/data/")
 const store = join(path, "store.json")
 const oldstore = join(path, "store.json.old")
+const defaultStore: Store = {
+    lastID: "0",
+    channels: []
+}
 
 export default class DataManager {
-    store: Store = { lastID: "0" }
+    store: Store = defaultStore
     articles: Article[] = []
 
     constructor() {
@@ -22,7 +26,7 @@ export default class DataManager {
         try {
             if (existsSync(store))
                 try {
-                    this.store = JSON.parse(readFileSync(store).toString())
+                    this.store = Object.assign({}, defaultStore, JSON.parse(readFileSync(store).toString()))
                     return
                 } catch (error) {
                     Logger.error("Failed to read/parse store.json")
@@ -30,7 +34,7 @@ export default class DataManager {
 
             if (existsSync(oldstore))
                 try {
-                    this.store = JSON.parse(readFileSync(oldstore).toString())
+                    this.store = Object.assign({}, defaultStore, JSON.parse(readFileSync(oldstore).toString()))
                     Logger.error("Restored from old store!")
                     return
                 } catch (error) {
@@ -51,12 +55,16 @@ export default class DataManager {
         return this.lastReleased - 1
     }
 
-    getNextArticle(): Article {
+    getLatestArticle(): Article {
         return this.articles[this.getLastReleasedIndex()]
     }
 
+    getNextArticle(): Article | undefined {
+        return this.articles[this.getLastReleasedIndex()+1]
+    }
+
     getRandomArticle(): Article {
-        return this.articles[Math.floor(Math.random() * this.getLastReleasedIndex())]
+        return this.articles[Math.floor(Math.random() * (this.getLastReleasedIndex()+1))]
     }
 
     getArticle(id: string): Article | undefined {

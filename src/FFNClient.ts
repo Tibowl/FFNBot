@@ -3,9 +3,11 @@ import Enmap from "enmap"
 import fs from "fs"
 import { join } from "path"
 
-import TimerManager from "./utils/TimerManager"
-import TweetManager from "./utils/TweetManager"
 import DataManager from "./utils/DataManager"
+import TimerManager from "./utils/TimerManager"
+
+import TweetManager from "./utils/TweetManager"
+import RedditManager from "./utils/RedditManager"
 
 import config from "./data/config.json"
 import log4js from "log4js"
@@ -16,7 +18,9 @@ const Logger = log4js.getLogger("main")
 export default class FFNClient extends Discord.Client {
     data: DataManager = new DataManager()
     timerManager: TimerManager = new TimerManager()
+
     tweetManager: TweetManager = new TweetManager()
+    redditManager: RedditManager = new RedditManager()
 
     commands: Enmap<string, Command> = new Enmap()
     recentMessages: Discord.Message[] = []
