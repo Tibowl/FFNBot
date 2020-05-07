@@ -2,7 +2,7 @@ import {  Message, TextChannel, StringResolvable, MessageEmbed, MessageAttachmen
 
 import client from "./../main"
 import { Article } from "./Types"
-
+import config from "./../data/config.json"
 
 function limitIndex(words: string[], maxLength = 50): number {
     let end = 0; let currentLength = 0
@@ -68,7 +68,7 @@ export function listArticles(articles: Article[], user: User): MessageEmbed {
         ).join("\n\n"))
 }
 
-export async function sendToChannels(channels: string[] | undefined, content?: StringResolvable, embed?: MessageEmbed | MessageAttachment): Promise<(Message | Message[])[]> {
+export async function sendToChannels(channels: string[] | undefined, content: StringResolvable, embed?: MessageEmbed | MessageAttachment): Promise<(Message | Message[])[]> {
     const messages = []
     if (!channels) return Promise.all([])
 
@@ -79,4 +79,9 @@ export async function sendToChannels(channels: string[] | undefined, content?: S
     }
 
     return Promise.all(messages)
+}
+
+export async function sendError(content: StringResolvable, embed?: MessageEmbed | MessageAttachment): Promise<(Message | Message[])[]> {
+    const channels = config.errorLog
+    return sendToChannels(channels, content, embed)
 }

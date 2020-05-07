@@ -3,7 +3,7 @@ import log4js from "log4js"
 import client from "../main"
 import config from "../data/config.json"
 import { Article } from "./Types"
-import { sendToChannels, displayArticle, getURL, truncate } from "../utils/Utils"
+import { sendToChannels, displayArticle, getURL, truncate, sendError } from "../utils/Utils"
 
 const Logger = log4js.getLogger("TimerManager")
 const news = [
@@ -58,28 +58,39 @@ export default class TimerManager {
             return
         }
 
-        if (newArticles.length > 10) {
-            Logger.error("More than 10 new articles, skipping posting")
-            return
-        }
-
-        for (const article of newArticles) {
+        if (newArticles.length > 0) {
+            const article = newArticles[0]
             this.previousPost = article
             data.store.lastID = this.previousPost.id
 
             Logger.info(`Posting ${article.id}: ${article.headline}...`)
-            await sendToChannels(data.store.channels, this.getBreakingNews(), displayArticle(article))
-            await client.tweetManager.postTweet(`${truncate(article.headline, 220)} | #FakeFakeNews ${getURL(article, false)}`)
-            await client.redditManager.post(article.headline, getURL(article, true))
+            try {
+                await sendToChannels(data.store.channels, this.getBreakingNews(), displayArticle(article))
+            } catch (error) {
+                Logger.error(`Failed to post on discord: ${article.id}`)
+                sendError(`Failed to post on discord: ${article.id}`)
+            }
+            try {
+                await client.tweetManager.postTweet(`${truncate(article.headline, 220)} | #FakeFakeNews ${getURL(article, false)}`)
+            } catch (error) {
+                Logger.error(`Failed to tweet: ${article.id}`)
+                sendError(`Failed to tweet: ${article.id}`)
+            }
+            try {
+                await client.redditManager.post(article.headline, getURL(article, true))
+            } catch (error) {
+                Logger.error(`Failed to post on reddit: ${article.id}`)
+                sendError(`Failed to post on reddit: ${article.id}`)
+            }
         }
         data.saveStore()
 
-        const next = data.getNextArticle()
+        const next = data.articles[this.previousPost.ind+1]
         if (next == undefined) return
 
-        const target = next.publishedDate + 60000
+        const target = Math.max(next.publishedDate + 60*1000, Date.now() + 10*60*1000)
         const time = target - Date.now()
-        Logger.info(`Next article at ${(time / 1000 / 60).toFixed(1)}m from now (at ${new Date(target).toISOString()})`)
+        Logger.info(`Next article in ${(time / 1000 / 60).toFixed(1)}m from now (at ${new Date(target).toISOString()})`)
 
         setTimeout(() => {
             this.postNewArticles()
