@@ -46,7 +46,7 @@ export function displayArticle(article: Article): MessageEmbed {
         .setAuthor(article.author, getAvatar(), "https://www.fakefake.news/")
         .setDescription(article.description)
         .setTimestamp(article.publishedDate)
-        .setURL(`https://www.fakefake.news/article/${article.id}`)
+        .setURL(getURL(article, true))
         .setFooter(article.category.replace(/^[a-z]/, a => a.toUpperCase()))
 
     if (article.image !== "/") {
