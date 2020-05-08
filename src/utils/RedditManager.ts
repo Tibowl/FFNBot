@@ -10,17 +10,18 @@ export default class RedditManager {
 
     async post(title: string, url: string): Promise<unknown> {
         Logger.info(`Posting ${title}`)
-        return new Promise((resolve, reject) =>
-            this.r.getSubreddit("FakeFakeNewsArticles").submitLink({
+        return new Promise((resolve, reject) => this.r.getSubreddit("FakeFakeNewsArticles")
+            .submitLink({
                 title,
                 url
             } as never)
-                .then(submission => submission.assignFlair({
-                    text: "News",
-                    cssClass: "li-fl-news",
-                }))
-                .then(resolve)
-                .catch(reject)
+            .then(submission => submission.assignFlair({
+                text: "News",
+                cssClass: "li-fl-news",
+            }))
+            .then(submission => submission.approve())
+            .then(resolve)
+            .catch(reject)
         )
     }
 }
