@@ -71,7 +71,7 @@ export default class TimerManager {
         const next = data.articles[this.previousPost.ind+1]
         if (next == undefined) return
 
-        const target = Math.max(next.publishedDate + 60*1000, Date.now() + 10*60*1000)
+        const target = Math.max(next.publishedDate + 60*1000, Date.now() + 30*60*1000)
         const time = target - Date.now()
         Logger.info(`Next article in ${(time / 1000 / 60).toFixed(1)}m from now (at ${new Date(target).toISOString()})`)
 
