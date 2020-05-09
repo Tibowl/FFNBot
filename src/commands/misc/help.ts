@@ -51,9 +51,10 @@ ${Object.entries(categorized)
         if (command == null)
             command = commands.find(k => (k.aliases||[]).includes(commandName))
 
-        // Replace first char (could be some prefix)
+        // Replace prefix
+        commandName = commandName.replace(config.prefix, "")
         if (command == null)
-            command = commands.find(k => (k.aliases||[]).includes(commandName.slice(1)))
+            command = commands.find(k => k.commandName === commandName.replace(config.prefix, "") || (k.aliases||[]).includes(commandName.replace(config.prefix, "")))
 
         if (command == null)
             return message.reply("Command does not exist")
