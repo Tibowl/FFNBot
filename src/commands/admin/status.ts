@@ -52,6 +52,12 @@ Current uptime: ${formatTime(process.uptime())}
 Cache: in ${client.channels.cache.size} channels on ${client.guilds.cache.size} servers, for a total of ${client.users.cache.size} users.
 Total commands executed: ${totalCommands}
 ${args && args.length > 0 ? `
+Last released index: ${data.getLastReleasedIndex()}
+Total articles: ${data.articles.length}
+Next article at ${new Date(data.getNextArticle()?.publishedDate ?? 0).toISOString()}
+Lastest article at ${new Date(data.getLatestArticle().publishedDate).toISOString()}
+Not yet tweeted: ${data.articles.slice((client.timerManager.previousPost?.ind??0)+1, data.getLastReleasedIndex()+1).length}
+
 Admins: ${await getAdmins()}
 `:""}`)
     }
